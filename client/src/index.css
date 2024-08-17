@@ -4,7 +4,7 @@
   }
   
   .red{
-    background-color: rgb(20, 49, 87);
+    background-color: #143157;
     color: white;
   }
 
@@ -56,14 +56,14 @@ a li{
 
 
 .sidebar {
-  background-color: #333;
+  background-color: #0c181b;
   color: white;
   width: 135px;
   height: 100%;
   position: fixed;
   top: 0;
-  left: -250px; /* Hidden by default */
-  padding-top: 7px; /* Add some padding to account for the fixed navbar */
+  left: -250px; 
+  padding-top: 7px; 
   transition: 0.3s;
   z-index: 999;
 }
@@ -85,20 +85,20 @@ a li{
 
 
 .sidebar-link:hover {
-  background-color: #575757;
+  background-color:  rgb(20, 49, 87);
 }
 
 .sidebar.active {
-  left: 0; /* Show sidebar */
+  left: 0; 
 }
 
 .content {
   margin-left: 20px;
-  padding-top: 70px; /* Add some padding to account for the fixed navbar */
+  padding-top: 70px; 
   width: 100%;
   transition: margin-left 0.3s;
 }
 
 .content.shifted {
-  margin-left: 270px; /* Shift content when sidebar is visible */
+  margin-left: 270px; 
 }
