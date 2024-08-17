@@ -2,32 +2,39 @@
     padding: 0;
     margin: 0;
   }
-  
-  nav{
-    display: flex;
-    gap: 34px;
-    background-color:  #0089b7;;
-    color: white;
-  }
-  
-  li{
-    list-style: none;
-    padding: 23px;
-  }
-  
-  a li{
-    color: white;
-  }
-
-  .red{
-    background-color: red;
-    color: white;
-  }
-
-  .red:hover{
-    opacity: 0.8;
-  }
 
   a{
     text-decoration: none;
   }
+
+  .navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color:  #0c181b;
+    padding: 5px 10px;
+  }
+
+  .navbar-left {
+    display: flex;
+    gap: 34px;
+}
+
+.navbar-left .red {
+  background-color: rgb(20, 49, 87);
+  color: white;
+  text-decoration: none;
+}
+
+.navbar-right {
+  display: flex;
+}
+
+li{
+  list-style: none;
+  padding: 20px;
+}
+
+a li{
+  color: white;
+}
