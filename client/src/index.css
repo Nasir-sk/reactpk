@@ -73,6 +73,8 @@ a li{
   margin-bottom: 8px;
   font-size: 24px;
   width: 30px;
+  background: #0c181b;
+  color: white;
 }
 
 .sidebar-link {
@@ -102,3 +104,4 @@ a li{
 .content.shifted {
   margin-left: 270px; 
 }
+
