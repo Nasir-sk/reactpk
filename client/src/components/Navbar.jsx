@@ -1,13 +1,22 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 export default function Navbar() {
+  const auth = localStorage.getItem('user');
+  const navigate = useNavigate();
   const [isSidebarActive, setIsSidebarActive] = useState(false);
+
+  const logout=()=>{
+    localStorage.clear();
+    navigate('/signup')
+  }
 
   const toggleSidebar = () => {
     setIsSidebarActive(!isSidebarActive);
   };
+
+
 
   return (
     <div>
@@ -21,13 +30,17 @@ export default function Navbar() {
             <NavLink className={(e)=>{return e.isActive?"red": ""}} to="/profile"><li>Profile</li></NavLink>
             </div>
             <div className='navbar-right'>
-            <NavLink className={(e)=>{return e.isActive?"red": ""}} to="/logout"><li>Logout</li></NavLink>
+           {
+            auth ? 
+            <NavLink className={(e)=>{return e.isActive?"red": ""}} onClick={logout} to="/signup"><li>Logout</li></NavLink>
+            : <>
+              <NavLink className={(e)=>{return e.isActive?"red": ""}}  to="/signup"><li>Signup</li></NavLink>
+              <NavLink className={(e)=>{return e.isActive?"red": ""}}  to="/login"><li>Login</li></NavLink>
+            </>
+           }
             </div>
         </nav>
         <aside  className={`sidebar ${isSidebarActive ? 'active' : ''}`}>
-        <button className="sidebar-tgl" onClick={toggleSidebar}>
-                &#9776;
-            </button>
             <Link className='sidebar-link'to="/"><li>Home</li></Link>
             <Link className='sidebar-link' to="/about"><li>About</li></Link>
             <Link className='sidebar-link' to="/update"><li>Recent Update</li></Link>

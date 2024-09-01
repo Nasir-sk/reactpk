@@ -56,6 +56,7 @@ a li{
 
 
 .sidebar {
+  margin-top: 60px;
   background-color: #0c181b;
   color: white;
   width: 135px;
