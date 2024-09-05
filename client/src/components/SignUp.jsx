@@ -6,6 +6,35 @@ export default function SignUp() {
   const [name, setName]=useState("");
   const [email, setEmail]=useState("");
   const [password, setPassword]=useState("");
+  const [errs, setErrs] = useState({});
+  const [errors, setErrors] = useState([]);
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const validateInputs=()=>{
+    const newErrs = {};
+
+    const emailRegex = /^[^\@]+@[^\s@]+\.[^\s@]+$/;
+    if(!email){
+      newErrs.email = "Email is required";
+    }else if(!emailRegex.test(email)){
+      newErrs.email = "Invalid email formate";
+    }
+
+    if(!name){
+      newErrs.name = "Username is required";
+    }else if(name.length < 3){
+      newErrs.name = "Username must be at least 3 characters"
+    }
+
+    if(!password){
+      newErrs.password = "Password is required";
+    }else if(password.length < 8){
+      newErrs.password = "Password must be at least 8 characters"
+    }
+
+    setErrs(newErrs);
+    return Object.keys(newErrs).length === 0;
+  }
 
   const navigate = useNavigate();
 
@@ -17,18 +46,43 @@ export default function SignUp() {
   })
 
   const collectData= async ()=>{
-    console.warn(name, email, password);
-    let result = await fetch('http://localhost:5000/signup',{
-      method: 'post',
-      body: JSON.stringify({name, email, password}),
-      headers:{ 'Content-Type':'application/json'}
-    })
-    result = await result.json()
-    console.log(result);
-    localStorage.setItem("user",JSON.stringify(result))
-    navigate('/');
+    setErrors([]);
+    setSuccessMessage('');
+
+    // Prepare the data
+    const data = { email, name, password };
+   if(validateInputs()){
+    try{
+      console.warn(name, email, password);
+      let result = await fetch('http://localhost:5000/signup',{
+        method: 'post',
+        body: JSON.stringify(data),
+        headers:{ 'Content-Type':'application/json'}
+      });
+      
+      // console.log(result);
     
-  }
+
+      const response = await result.json();
+      console.log('Server response:', response); 
+      if (result.ok) {
+        setSuccessMessage('User registered successfully!');
+        setEmail('');
+        setName('');
+        setPassword('');
+        localStorage.setItem("user",JSON.stringify(data))
+        navigate('/');
+      } else {
+        setErrors(response.errors);
+      }
+    } catch (error) {
+      setErrors([{ msg: 'Something went wrong. Please try again.' }]);
+    }
+   }
+  };
+   
+    
+  
   return (
     <div className="signup-container">
     <div className="signup-form">
@@ -42,6 +96,7 @@ export default function SignUp() {
           value={name}
           onChange={(e)=>setName(e.target.value)}
         />
+         {errs.name && <p>{errs.name}</p>}
       </div>
       <div className="form-group">
         <label htmlFor="email">Email</label>
@@ -52,6 +107,7 @@ export default function SignUp() {
           value={email}
           onChange={(e)=>setEmail(e.target.value)}
         />
+        {errs.email && <p>{errs.email}</p>}
       </div>
       <div className="form-group">
         <label htmlFor="password">Password</label>
@@ -62,10 +118,21 @@ export default function SignUp() {
           value={password}
           onChange={(e)=>setPassword(e.target.value)}
         />
+        {errs.password && <p>{errs.password}</p>}
       </div>
       <button  className="submit-button" onClick={collectData}>
         Sign Up
       </button>
+        {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+
+      {/* Display Error Messages */}
+      {errors.length > 0 && (
+        <ul style={{ color: 'red' }}>
+          {errors.map((error, index) => (
+            <li key={index}>{error.msg}</li>
+          ))}
+        </ul>
+      )}
       <div className='form-group'>
       <p>Already have an account <Link to='/login'>Login</Link></p>
       
