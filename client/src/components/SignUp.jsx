@@ -127,14 +127,14 @@ export default function SignUp() {
 
       {/* Display Error Messages */}
       {errors.length > 0 && (
-        <ul style={{ color: 'red' }}>
+        <ul className='err-list'>
           {errors.map((error, index) => (
             <li key={index}>{error.msg}</li>
           ))}
         </ul>
       )}
       <div className='form-group'>
-      <p>Already have an account <Link to='/login'>Login</Link></p>
+      <p style={{color: 'white'}}>Already have an account <Link to='/login'>Login</Link></p>
       
     </div>
     </div>

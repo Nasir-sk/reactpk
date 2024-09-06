@@ -5,6 +5,27 @@ export default function Login() {
 
   const [email, setEmail]=useState("");
   const [password, setPassword]=useState("");
+  const [errs, setErrs] = useState({});
+
+  const validateInputs=()=>{
+    const newErrs = {};
+
+    const emailRegex = /^[^\@]+@[^\s@]+\.[^\s@]+$/;
+    if(!email){
+      newErrs.email = "Email is required";
+    }else if(!emailRegex.test(email)){
+      newErrs.email = "Invalid email formate";
+    }
+
+    if(!password){
+      newErrs.password = "Password is required";
+    }else if(password.length < 8){
+      newErrs.password = "Password must be at least 8 characters"
+    }
+
+    setErrs(newErrs);
+    return Object.keys(newErrs).length === 0;
+  }
 
   const navigate = useNavigate();
   useEffect(()=>{
@@ -15,12 +36,15 @@ export default function Login() {
   })
 
   const collectData= async ()=>{
-    console.warn(email, password);
-    let result = await fetch('http://localhost:5000/login',{
-      method: 'post',
-      body: JSON.stringify({email, password}),
-      headers:{ 'Content-Type':'application/json'}
-    })
+    if(validateInputs()){
+      try{
+            console.warn(email, password);
+            let result = await fetch('http://localhost:5000/login',{
+              method: 'post',
+              body: JSON.stringify({email, password}),
+              headers:{ 'Content-Type':'application/json'}
+            })
+  
     result = await result.json()
     console.log(result);
     if(result.name){
@@ -29,6 +53,10 @@ export default function Login() {
     }else{
       alert("please enter correct details");
     }
+  } catch (error) {
+    // setErrors([{ msg: 'Something went wrong. Please try again.' }]);
+  }
+ }
     
   }
 
@@ -45,6 +73,7 @@ export default function Login() {
           value={email}
           onChange={(e)=>setEmail(e.target.value)}
         />
+        {errs.email && <p>{errs.email}</p>}
       </div>
       <div className="form-group">
         <label htmlFor="password">Password</label>
@@ -55,6 +84,7 @@ export default function Login() {
           value={password}
           onChange={(e)=>setPassword(e.target.value)}
         />
+        {errs.password && <p>{errs.password}</p>}
       </div>
       <button type="submit" className="submit-button"  onClick={collectData}>
         Login
