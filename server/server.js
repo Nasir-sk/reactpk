@@ -76,18 +76,39 @@ app.post("/signup",
       }
 })
 
-app.post("/login", async (req, resp)=>{
-    console.log(req.body);
-    if(req.body.password && req.body.email){
-        let user = await User.findOne(req.body).select("-password");
-        if(user){
-            resp.send(user)
-        }else{
-            resp.send({result:"No user found"})
-        }
-    }else{
-        resp.send({result:"No user found"})
+app.post('/login',
+  [
+    // Email Validation
+    body('email')
+      .isEmail()
+      .withMessage('Please enter a valid email'),
+    // Password Validation
+    body('password')
+      .isLength({ min: 8 })
+      .withMessage('Password must be at least 8 characters long'),
+  ], async (req, res)=>{
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
+  const {email, password} = req.body;
+
+  try{
+    const user = await User.findOne({email});
+    if(!user){
+      return res.status(400).json({ errors: [{msg:"Invalid email or password"}]});
+    }
+    console.log("email match");
+    const isMatch = await bcrypt.compare(password, user.password);
+    if(!isMatch){
+      return res.status(400).json({errors:[{msg:"Invalid email or password"}]})
+    }
+    console.log("password match");
+   res.status(200).json({message:"Login successful"});
+  }catch(err){
+    console.error(err.message);
+    res.status(500).send('Server error')
+  }
 })
 
 app.listen(5000);
