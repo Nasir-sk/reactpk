@@ -21,24 +21,29 @@ export default function Navbar() {
   return (
     <div>
         <nav className='navbar'>
+        { auth ? 
+        <>
             <div className="navbar-left">
             <button className="sidebar-toggle" onClick={toggleSidebar}>
                 &#9776;
             </button>
+            <NavLink className={(e)=>{return e.isActive?"red": ""}} to="/"><li>Home</li></NavLink>
             <NavLink className={(e)=>{return e.isActive?"red": ""}} to="/products"><li>Products</li></NavLink>
             <NavLink className={(e)=>{return e.isActive?"red": ""}} to="/add-product"><li>Add Products</li></NavLink>
-            <NavLink className={(e)=>{return e.isActive?"red": ""}} to="/profile"><li>Profile</li></NavLink>
+            <NavLink className={(e)=>{return e.isActive?"red": ""}} to="/profile"><li>Profile ({JSON.parse(auth).name})</li></NavLink>
             </div>
             <div className='navbar-right'>
-           {
-            auth ? 
             <NavLink className={(e)=>{return e.isActive?"red": ""}} onClick={logout} to="/signup"><li>Logout</li></NavLink>
+            </div>
+            </>
             : <>
+            <div className='navbar-right'>
               <NavLink className={(e)=>{return e.isActive?"red": ""}}  to="/signup"><li>Signup</li></NavLink>
               <NavLink className={(e)=>{return e.isActive?"red": ""}}  to="/login"><li>Login</li></NavLink>
+              </div>
             </>
-           }
-            </div>
+          }
+            
         </nav>
         <aside  className={`sidebar ${isSidebarActive ? 'active' : ''}`}>
             <Link className='sidebar-link'to="/"><li>Home</li></Link>
