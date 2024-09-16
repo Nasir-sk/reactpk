@@ -48,7 +48,6 @@ export default function SignUp() {
     setErrors([]);
     setSuccessMessage("");
 
-    // Prepare the data
     const data = { email, name, password };
     if (validateInputs()) {
       try {
@@ -121,7 +120,6 @@ export default function SignUp() {
         </button>
         {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
 
-        {/* Display Error Messages */}
         {errors.length > 0 && (
           <ul className="err-list">
             {errors.map((error, index) => (

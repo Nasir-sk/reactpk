@@ -1,12 +1,11 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState} from 'react';
 export default function Navbar() {
   const auth = localStorage.getItem('user');
   const navigate = useNavigate();
   const [isSidebarActive, setIsSidebarActive] = useState(false);
-
   const logout=()=>{
     localStorage.clear();
     navigate('/signup')
@@ -24,13 +23,18 @@ export default function Navbar() {
         { auth ? 
         <>
             <div className="navbar-left">
-            <button className="sidebar-toggle" onClick={toggleSidebar}>
+            {/* <button className="sidebar-toggle" onClick={toggleSidebar}>
                 &#9776;
-            </button>
+            </button> */}
+            <img
+              alt='logo'
+              className='logo'
+              src='https://media.licdn.com/dms/image/v2/C560BAQE0YLKt7EeMZw/company-logo_200_200/company-logo_200_200/0/1630645895449/dealsdray_logo?e=2147483647&v=beta&t=Wx__HB2mc1s25fWixbjB1xK9CnvugVlKnQhnKsRCtGI'
+            />
+               
             <NavLink className={(e)=>{return e.isActive?"red": ""}} to="/"><li>Home</li></NavLink>
-            <NavLink className={(e)=>{return e.isActive?"red": ""}} to="/products"><li>Products</li></NavLink>
-            <NavLink className={(e)=>{return e.isActive?"red": ""}} to="/add-product"><li>Add Products</li></NavLink>
-            <NavLink className={(e)=>{return e.isActive?"red": ""}} to="/profile"><li>Profile ({JSON.parse(auth).name})</li></NavLink>
+            <NavLink className={(e)=>{return e.isActive?"red": ""}} to="/employee-list"><li>Employee List</li></NavLink>
+            <NavLink className={(e)=>{return e.isActive?"red": ""}} to="/profile"><li>{JSON.parse(auth).name}</li></NavLink>
             </div>
             <div className='navbar-right'>
             <NavLink className={(e)=>{return e.isActive?"red": ""}} onClick={logout} to="/signup"><li>Logout</li></NavLink>

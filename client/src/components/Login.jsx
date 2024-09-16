@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./SignUp.css";
 import { Link, useNavigate } from "react-router-dom";
 export default function Login() {
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [errs, setErrs] = useState({});
   const [errors, setErrors] = useState([]);
@@ -11,11 +11,10 @@ export default function Login() {
   const validateInputs = () => {
     const newErrs = {};
 
-    const emailRegex = /^[^\@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) {
-      newErrs.email = "Email is required";
-    } else if (!emailRegex.test(email)) {
-      newErrs.email = "Invalid email formate";
+    if (!name) {
+      newErrs.name = "Username is required";
+    } else if (name.length < 3) {
+      newErrs.name = "Username must be at least 3 characters";
     }
 
     if (!password) {
@@ -39,11 +38,11 @@ export default function Login() {
   const collectData = async () => {
     setErrors([]);
     setSuccessMessage("");
-    const data = { email, password };
+    const data = { name, password };
 
     if (validateInputs()) {
       try {
-        console.warn(email, password);
+        console.warn(name, password);
         let result = await fetch("http://localhost:5000/login", {
           method: "post",
           body: JSON.stringify(data),
@@ -54,7 +53,7 @@ export default function Login() {
         console.log("Server response:", response);
         if (result.ok) {
           setSuccessMessage("User registered successfully!");
-          setEmail("");
+          setName("");
           setPassword("");
           localStorage.setItem("user", JSON.stringify(data));
           navigate("/");
@@ -72,15 +71,15 @@ export default function Login() {
       <div className="signup-form">
         <h2>Login</h2>
         <div className="form-group">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="name">Name</label>
           <input
-            type="email"
+            type="text"
             autoComplete="off"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
-          {errs.email && <p>{errs.email}</p>}
+          {errs.name && <p>{errs.name}</p>}
         </div>
         <div className="form-group">
           <label htmlFor="password">Password</label>

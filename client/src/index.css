@@ -2,7 +2,78 @@
     padding: 0;
     margin: 0;
   }
+
+  .logo{
+    height: 50px;
+    width: 50px;
+    float: left;
+    border-radius: 50%;
+    margin-top: 3px;
+    margin-left: 20px;
+  }
+
+  .emp-table, .emp-link{
+    margin-top: 4px;
+  }
+
+  .emp-table p{
+    text-align: center;
+    margin-top: 10%;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+table{
+  margin: 2px 1px;
+  border-collapse: collapse;
+  width: 99%;
+  text-align: center;
+}
+
+
+th, td {
+  border: 1px solid black;
+  padding: 2px 1px;
+}
+
+
+.search-box label{
+  font-size: 18px;
+}
+
+.search-box input{
+  font-size: 13px;
+  height: 25px;
+  border: 1px solid;
+  text-align: center;
+  border-radius: 2px;
+}
   
+.home-page h3{
+  text-align: left;
+  padding: 8px;
+  width: 100%;
+  background-color: yellow;
+}
+
+
+.emp-link .emp-li{
+  display: flex;
+  justify-content: end;
+  gap: 4rem;
+  font-size: 18px;
+}
+
+.emp-link a{
+  margin-right: 20px;
+  padding: 4px;
+  background-color: aquamarine;
+}
+
+.home-page h4{
+  margin-top: 10%;
+  text-align: center;
+}
   .red{
     background-color: #143157;
     color: white;
@@ -17,7 +88,7 @@
     justify-content: space-between;
     align-items: center;
     background-color:  #0c181b;
-    padding: 5px 10px;
+    /* padding: 5px 10px; */
   }
 
   .navbar-left {
