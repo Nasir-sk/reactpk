@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './EmployeeForm.css'
+import './EmployeeForm.css';
+
 const EditEmployee = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -15,7 +16,6 @@ const EditEmployee = () => {
     image: '',
   });
 
-  
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -37,7 +37,7 @@ const EditEmployee = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [params.id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -65,8 +65,7 @@ const EditEmployee = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     const formData = new FormData();
     for (const key in updatedUser) {
       formData.append(key, updatedUser[key]);
@@ -96,120 +95,121 @@ const EditEmployee = () => {
   }
 
   return (
-    <div className='emp-form'>
+    <div className="emp-form">
       <h2>Edit Employee</h2>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <div>
-          <label>Name:</label>
+
+      <div>
+        <label>Name:</label>
+        <input
+          type="text"
+          name="name"
+          value={updatedUser.name}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+
+      <div>
+        <label>Email:</label>
+        <input
+          type="email"
+          name="email"
+          value={updatedUser.email}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+
+      <div>
+        <label>Mobile:</label>
+        <input
+          type="tel"
+          name="mobile"
+          value={updatedUser.mobile}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+
+      <div>
+        <label>Designation:</label>
+        <select
+          name="designation"
+          value={updatedUser.designation}
+          onChange={handleInputChange}
+        >
+          <option value="HR">HR</option>
+          <option value="Manager">Manager</option>
+          <option value="Sales">Sales</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Gender:</label>
+        <label>
           <input
-            type="text"
-            name="name"
-            value={updatedUser.name}
+            type="radio"
+            name="gender"
+            value="Male"
+            checked={updatedUser.gender === 'Male'}
             onChange={handleInputChange}
-            required
           />
-        </div>
-
-        <div>
-          <label>Email:</label>
+          Male
+        </label>
+        <label>
           <input
-            type="email"
-            name="email"
-            value={updatedUser.email}
+            type="radio"
+            name="gender"
+            value="Female"
+            checked={updatedUser.gender === 'Female'}
             onChange={handleInputChange}
-            required
           />
-        </div>
+          Female
+        </label>
+      </div>
 
-        <div>
-          <label>Mobile:</label>
+      <div>
+        <label>Courses:</label>
+        <label>
           <input
-            type="tel"
-            name="mobile"
-            value={updatedUser.mobile}
-            onChange={handleInputChange}
-            required
+            type="checkbox"
+            name="courses"
+            value="BCA"
+            checked={updatedUser.courses.includes('BCA')}
+            onChange={handleCheckboxChange}
           />
-        </div>
+          BCA
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            name="courses"
+            value="MCA"
+            checked={updatedUser.courses.includes('MCA')}
+            onChange={handleCheckboxChange}
+          />
+          MCA
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            name="courses"
+            value="Bsc"
+            checked={updatedUser.courses.includes('Bsc')}
+            onChange={handleCheckboxChange}
+          />
+          Bsc
+        </label>
+      </div>
 
-        <div>
-          <label>Designation:</label>
-          <select
-            name="designation"
-            value={updatedUser.designation}
-            onChange={handleInputChange}
-          >
-            <option value="HR">HR</option>
-            <option value="Manager">Manager</option>
-            <option value="Sales">Sales</option>
-          </select>
-        </div>
+      <div>
+        <label>Profile Picture:</label>
+        <input type="file" name="image" onChange={handleFileChange} />
+      </div>
 
-        <div>
-          <label>Gender:</label>
-          <label>
-            <input
-              type="radio"
-              name="gender"
-              value="Male"
-              checked={updatedUser.gender === 'Male'}
-              onChange={handleInputChange}
-            />
-            Male
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="gender"
-              value="Female"
-              checked={updatedUser.gender === 'Female'}
-              onChange={handleInputChange}
-            />
-            Female
-          </label>
-        </div>
-
-        <div>
-          <label>Courses:</label>
-          <label>
-            <input
-              type="checkbox"
-              name="courses"
-              value="BCA"
-              checked={updatedUser.courses.includes('BCA')}
-              onChange={handleCheckboxChange}
-            />
-            BCA
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="courses"
-              value="MCA"
-              checked={updatedUser.courses.includes('MCA')}
-              onChange={handleCheckboxChange}
-            />
-            MCA
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="courses"
-              value="Bsc"
-              checked={updatedUser.courses.includes('Bsc')}
-              onChange={handleCheckboxChange}
-            />
-            Bsc
-          </label>
-        </div>
-
-        <div>
-          <label>Profile Picture:</label>
-          <input type="file" name="image" onChange={handleFileChange} />
-        </div>
-
-        <button type="submit">Save Changes</button>
-      </form>
+      <button type="button" onClick={handleSubmit}>
+        Save Changes
+      </button>
     </div>
   );
 };
