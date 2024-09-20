@@ -8,7 +8,7 @@ const CreateEmployee = () => {
   const [mobile, setMobile] = useState('');
   const [designation, setDesignation] = useState('');
   const [gender, setGender] = useState('');
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState('');
   const [image, setImage] = useState(null);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();

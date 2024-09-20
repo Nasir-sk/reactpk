@@ -160,23 +160,24 @@ app.get('/api/users/:id', async (req, resp)=>{
 })
 
 app.put('/api/users/:id', upload.single('image'), async (req, res) => {
-  const { id } = req.params;
-  const updatedData = req.body;
-
   try {
-    if (req.file) {
-      updatedData.image = req.file.path;
-    }
-
-    const user = await Employee.findByIdAndUpdate(id, updatedData, { new: true });
-    if (!user) {
-      return res.status(404).json({ msg: 'User not found' });
-    }
-
-    res.status(200).json(user);
+    const { name, email, mobile, designation, gender, courses, image } = req.body;
+    const updatedEmployee = await Employee.findByIdAndUpdate(
+      req.params.id,
+      {
+        name,
+        email,
+        mobile,
+        designation,
+        gender,
+        courses: courses.split(','), // Convert string to array
+        image,
+      },
+      { new: true }
+    );
+    res.json(updatedEmployee);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ msg: 'Server error' });
+    res.status(400).json({ message: error.message });
   }
 });
 

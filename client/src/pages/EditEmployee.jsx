@@ -12,7 +12,7 @@ const EditEmployee = () => {
     mobile: '',
     designation: 'HR',
     gender: 'Male',
-    courses: [],
+    courses: '',
     image: '',
   });
 
