@@ -159,9 +159,10 @@ app.get('/api/users/:id', async (req, resp)=>{
   }
 })
 
+
 app.put('/api/users/:id', upload.single('image'), async (req, res) => {
   try {
-    const { name, email, mobile, designation, gender, courses, image } = req.body;
+    const { name, email, mobile, designation, gender, courses, image} = req.body;
     const updatedEmployee = await Employee.findByIdAndUpdate(
       req.params.id,
       {
@@ -171,7 +172,7 @@ app.put('/api/users/:id', upload.single('image'), async (req, res) => {
         designation,
         gender,
         courses: courses.split(','), // Convert string to array
-        image,
+        image:req.file.path,
       },
       { new: true }
     );

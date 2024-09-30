@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './EmployeeForm.css';
+import './EmployeeForm.css'
 
 const EditEmployee = () => {
   const navigate = useNavigate();
@@ -13,8 +13,9 @@ const EditEmployee = () => {
     designation: 'HR',
     gender: 'Male',
     courses: '',
-    image: '',
+    image: null,
   });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -41,31 +42,70 @@ const EditEmployee = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUpdatedUser({
-      ...updatedUser,
+    setUpdatedUser((prevState) => ({
+      ...prevState,
       [name]: value,
-    });
+    }));
   };
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
-    const updatedCourses = checked
-      ? [...updatedUser.courses, value]
-      : updatedUser.courses.filter((course) => course !== value);
-    setUpdatedUser({
-      ...updatedUser,
-      courses: updatedCourses,
-    });
+    setUpdatedUser((prevState) => ({
+      ...prevState,
+      courses: checked
+        ? [...prevState.courses, value]
+        : prevState.courses.filter((course) => course !== value),
+    }));
   };
 
   const handleFileChange = (e) => {
-    setUpdatedUser({
-      ...updatedUser,
+    setUpdatedUser((prevState) => ({
+      ...prevState,
       image: e.target.files[0],
-    });
+    }));
   };
 
-  const handleSubmit = async () => {
+
+  const validate = () => {
+    const newErrors = {};
+
+    if (!updatedUser.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!updatedUser.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!emailPattern.test(updatedUser.email)) {
+      newErrors.email = 'Invalid email format';
+    }
+
+    const mobilePattern = /^\d{10}$/;
+    if (!updatedUser.mobile.trim()) {
+      newErrors.mobile = 'Mobile number is required';
+    } else if (!mobilePattern.test(updatedUser.mobile)) {
+      newErrors.mobile = 'Mobile number must be 10 digits';
+    }
+
+    if (updatedUser.courses.length === 0) {
+      newErrors.courses = 'At least one course must be selected';
+    }
+
+    if (!updatedUser.image) {
+      newErrors.image = 'Profile picture is required';
+    } else if (!['image/jpeg', 'image/png'].includes(updatedUser.image.type)) {
+      newErrors.image = 'Only JPEG or PNG images are allowed';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // Return true if no errors
+  };
+
+  const handleSaveChanges = async () => {
+    if (!validate()) {
+      return; 
+    }
+
     const formData = new FormData();
     for (const key in updatedUser) {
       formData.append(key, updatedUser[key]);
@@ -79,7 +119,7 @@ const EditEmployee = () => {
 
       if (response.ok) {
         const updatedData = await response.json();
-        setUserData(updatedData); // Update the state with the new data
+        setUserData(updatedData);
         alert('User updated successfully');
         navigate('/employee-list');
       } else {
@@ -95,7 +135,7 @@ const EditEmployee = () => {
   }
 
   return (
-    <div className="emp-form">
+    <div className='emp-form'>
       <h2>Edit Employee</h2>
 
       <div>
@@ -107,6 +147,7 @@ const EditEmployee = () => {
           onChange={handleInputChange}
           required
         />
+        {errors.name && <p className="error">{errors.name}</p>}
       </div>
 
       <div>
@@ -118,17 +159,19 @@ const EditEmployee = () => {
           onChange={handleInputChange}
           required
         />
+        {errors.email && <p className="error">{errors.email}</p>}
       </div>
 
       <div>
         <label>Mobile:</label>
         <input
-          type="tel"
+          type="text"
           name="mobile"
           value={updatedUser.mobile}
           onChange={handleInputChange}
           required
         />
+        {errors.mobile && <p className="error">{errors.mobile}</p>}
       </div>
 
       <div>
@@ -173,7 +216,6 @@ const EditEmployee = () => {
         <label>
           <input
             type="checkbox"
-            name="courses"
             value="BCA"
             checked={updatedUser.courses.includes('BCA')}
             onChange={handleCheckboxChange}
@@ -183,7 +225,6 @@ const EditEmployee = () => {
         <label>
           <input
             type="checkbox"
-            name="courses"
             value="MCA"
             checked={updatedUser.courses.includes('MCA')}
             onChange={handleCheckboxChange}
@@ -193,23 +234,22 @@ const EditEmployee = () => {
         <label>
           <input
             type="checkbox"
-            name="courses"
             value="Bsc"
             checked={updatedUser.courses.includes('Bsc')}
             onChange={handleCheckboxChange}
           />
           Bsc
         </label>
+        {errors.courses && <p className="error">{errors.courses}</p>}
       </div>
 
       <div>
         <label>Profile Picture:</label>
         <input type="file" name="image" onChange={handleFileChange} />
+        {errors.image && <p className="error">{errors.image}</p>}
       </div>
 
-      <button type="button" onClick={handleSubmit}>
-        Save Changes
-      </button>
+      <button onClick={handleSaveChanges}>Save Changes</button>
     </div>
   );
 };
